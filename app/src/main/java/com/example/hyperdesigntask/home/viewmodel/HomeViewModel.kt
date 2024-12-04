@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hyperdesigntask.details.model.ShippmentDetailsResponse
 import com.example.hyperdesigntask.home.model.ShippmentResponse
 import com.example.hyperdesigntask.home.repo.HomeRepo
 import kotlinx.coroutines.launch

@@ -1,6 +1,7 @@
 package com.example.hyperdesigntask.details.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,8 @@ import com.example.hyperdesigntask.network.ApiClient
 class DetailsFragment : Fragment() {
     private lateinit var detailViewModel: DetailsViewModel
     private lateinit var binding : FragmentDetailsBinding
+    private val args: DetailsFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,17 +32,20 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val args: DetailsFragmentArgs by navArgs()
+        Log.d("TAG", "onViewCreated:${args.id} ")
         getViewModelReady()
+        detailViewModel.getShippmentDetailsResponse("AvOy2LyaZXetCEeg3lkNEEJIGF4TGk3nb0R8YUvJTU6ioBqLwIRWqKBTj1b9",40)
         detailViewModel.shippmentDetailsResponse.observe(requireActivity()){
             if(it.isSuccessful){
+
+              Log.d("TAG", "onViewCreated:${it.body()?.shippmentDetails?.shipment_name.toString()} ")
                 binding.tvShippmentNameDetails.text = it.body()?.shippmentDetails?.shipment_name.toString()
                 binding.tvShippmentDescDetails.text = it.body()?.shippmentDetails?.description.toString()
                 binding.tvShippmentStatusDetails.text= it.body()?.shippmentDetails?.status.toString()
                 binding.tvShippmentCommentDetails.text = it.body()?.shippmentDetails?.comment.toString()
             }
         }
-        detailViewModel.getShippmentDetailsResponse("AvOy2LyaZXetCEeg3lkNEEJIGF4TGk3nb0R8YUvJTU6ioBqLwIRWqKBTj1b9",args.id)
+
     }
     private fun getViewModelReady() {
         val factory = DetailsViewModelFactory(DetailsRepoImp(ApiClient))

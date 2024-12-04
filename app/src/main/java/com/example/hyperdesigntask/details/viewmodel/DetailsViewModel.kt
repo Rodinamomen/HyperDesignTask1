@@ -11,6 +11,7 @@ import retrofit2.Response
 
 class DetailsViewModel(val detailsRepo: DetailsRepo):ViewModel() {
     private val _shippmentDetailsResponse : MutableLiveData<Response<ShippmentDetailsResponse>> = MutableLiveData<Response<ShippmentDetailsResponse>>()
+
     val shippmentDetailsResponse : LiveData<Response<ShippmentDetailsResponse>> = _shippmentDetailsResponse
     fun getShippmentDetailsResponse(token: String,id:Int){
         viewModelScope.launch {

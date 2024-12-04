@@ -52,6 +52,7 @@ object ApiClient:RemoteDataSource {
         token: String,
         id: Int
     ): Response<ShippmentDetailsResponse> {
+
         val bearerToken = "Bearer $token"
         return apiService.getShipmentsDetails(bearerToken,id)
     }

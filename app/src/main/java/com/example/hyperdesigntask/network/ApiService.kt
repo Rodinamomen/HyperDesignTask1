@@ -44,5 +44,5 @@ interface ApiService {
 
 
     @POST("shippment-details")
-    suspend fun getShipmentsDetails(  @Header("Authorization") authHeader: String, @Body() id: Int):Response<ShippmentDetailsResponse>
+    suspend fun getShipmentsDetails(  @Header("Authorization") authHeader: String, @Body id: Int):Response<ShippmentDetailsResponse>
 }

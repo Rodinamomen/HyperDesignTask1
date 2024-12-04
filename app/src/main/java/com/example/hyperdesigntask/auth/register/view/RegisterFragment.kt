@@ -57,17 +57,26 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getViewModelReady()
         tokenSharedPreferences =createSharedPreferences()
-        registerViewModel.registerResponse.observe(requireActivity()){
-            if(it.isSuccessful){
-                if(it.body()?.status==200){
-                    Toast.makeText(requireContext(), "${it.body()?.user?.name}", Toast.LENGTH_SHORT).show()
-                        setToken(tokenSharedPreferences, it.body()!!.access_token)
-                      setId(tokenSharedPreferences,it.body()!!.user.id.toString())
-                    val action = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
-                    findNavController().navigate(action)
+        registerViewModel.registerResponse.observe(requireActivity()) {
+            if (it.isSuccessful) {
+                it.body()?.let { response ->
+                    if (response.message == "api.under_review_message_register") {
+                        val token = response.access_token
+                        val userId = response.user?.id.toString()
+                        setToken(tokenSharedPreferences, token)
+                        setId(tokenSharedPreferences, userId)
+
+                        Toast.makeText(requireContext(), "Welcome ${response.user?.name}", Toast.LENGTH_SHORT).show()
+
+                        val action = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
+                        findNavController().navigate(action)
+                    } else {
+                        Toast.makeText(requireContext(), "Registration failed: ${response.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
+            } else {
+                Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(requireContext(), "${it.body()?.user?.name}", Toast.LENGTH_SHORT).show()
         }
         imageUri= Uri.parse(" ")
         binding.ivAccount.setOnClickListener {

@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,14 +52,15 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     //navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+   // implementation( "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.4")
     //countery code
     implementation("com.hbb20:ccp:2.5.2")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     // interceptor
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
-    //pagging 3
+    //paging 3
     implementation ("androidx.paging:paging-runtime:3.3.4")
 }

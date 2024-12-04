@@ -38,6 +38,9 @@ class ShippmentAdapter(private val data : List<Data>?): RecyclerView.Adapter<Shi
         holder.shippmentDesc.text = data?.get(position)?.description
         holder.shippmentComment.text = data?.get(position)?.comment
         holder.shippmentStatus.text= data?.get(position)?.status
-        onItemClickListener.onItemClicked(data?.get(position)?.id as Int)
+        holder.itemView.setOnClickListener{
+            onItemClickListener.onItemClicked(data?.get(position)?.id as Int)
+        }
+
     }
 }
