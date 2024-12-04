@@ -5,7 +5,7 @@ import com.example.hyperdesigntask.network.RemoteDataSource
 import okhttp3.MultipartBody
 import retrofit2.Response
 
-class RegisterRepoImp(var remoteDataSource: RemoteDataSource):RegisterRepo {
+class RegisterRepoImp(private var remoteDataSource: RemoteDataSource):RegisterRepo {
     override suspend fun registerUser(
         name: String,
         email: String,

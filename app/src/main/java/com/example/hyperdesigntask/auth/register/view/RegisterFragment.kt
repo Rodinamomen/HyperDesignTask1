@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.hyperdesigntask.R
 import com.example.hyperdesigntask.auth.register.repo.RegisterRepoImp
 import com.example.hyperdesigntask.auth.register.viewmodel.RegisterViewModel
@@ -28,6 +29,7 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.http.Multipart
 import java.io.File
 import java.io.FileNotFoundException
@@ -40,14 +42,13 @@ class RegisterFragment : Fragment() {
         val KEY = "token_pref"
     }
     private lateinit var tokenSharedPreferences: SharedPreferences
-
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var imageUri: Uri
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,9 +58,14 @@ class RegisterFragment : Fragment() {
         getViewModelReady()
         tokenSharedPreferences =createSharedPreferences()
         registerViewModel.registerResponse.observe(requireActivity()){
-            if(it.body()?.status==200){
-                setToken(tokenSharedPreferences, it.body()!!.access_token)
-                setId(tokenSharedPreferences,it.body()!!.user.id.toString())
+            if(it.isSuccessful){
+                if(it.body()?.status==200){
+                    Toast.makeText(requireContext(), "${it.body()?.user?.name}", Toast.LENGTH_SHORT).show()
+                        setToken(tokenSharedPreferences, it.body()!!.access_token)
+                      setId(tokenSharedPreferences,it.body()!!.user.id.toString())
+                    val action = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
+                    findNavController().navigate(action)
+                }
             }
             Toast.makeText(requireContext(), "${it.body()?.user?.name}", Toast.LENGTH_SHORT).show()
         }
@@ -73,17 +79,16 @@ class RegisterFragment : Fragment() {
                     binding.etPassword
                 ) && checkNotEmpty(binding.etPhoneNumber)
             ) {
-                var name = binding.etName.editText?.text.toString()
-                var email = binding.etEmail.editText?.text.toString()
-                var password = binding.etPassword.editText?.text.toString()
-                var phone = binding.etPhoneNumber.editText?.text.toString()
-                var countryId = binding.counteryCodePicker.selectedCountryCode.toString()
+                val name = binding.etName.editText?.text.toString()
+                val email = binding.etEmail.editText?.text.toString()
+                val password = binding.etPassword.editText?.text.toString()
+                val phone = binding.etPhoneNumber.editText?.text.toString()
+                val countryId = binding.counteryCodePicker.selectedCountryCode.toString()
                 val imageFile = getFileFromUri(imageUri)
                 if (imageFile != null) {
-                    val imageType = requireContext().contentResolver.getType(imageUri).toString()
-                    val requestBody = RequestBody.create(imageType.toMediaTypeOrNull(), imageFile)
-                    val filePart =
-                        MultipartBody.Part.createFormData("file", imageFile.name, requestBody)
+                    val imageType = requireContext().contentResolver.getType(imageUri) ?: "image/jpeg"
+                    val requestBody = imageFile.asRequestBody(imageType.toMediaTypeOrNull())
+                    val filePart = MultipartBody.Part.createFormData("file", imageFile.name, requestBody)
                     registerViewModel.registerUser(
                         name,
                         email,
@@ -99,6 +104,10 @@ class RegisterFragment : Fragment() {
                         .show()
                 }
             }
+        }
+        binding.tvLogin.setOnClickListener {
+            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+            findNavController().navigate(action)
         }
 
     }
