@@ -5,6 +5,8 @@ import com.example.hyperdesigntask.auth.login.model.LogInResponse
 import com.example.hyperdesigntask.auth.register.model.RegisterResponse
 import com.example.hyperdesigntask.details.model.ShippmentDetailsResponse
 import com.example.hyperdesigntask.home.model.ShippmentResponse
+import com.example.hyperdesigntask.request.model.RequestQuotation
+import com.example.hyperdesigntask.request.model.RequestResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -42,7 +44,11 @@ interface ApiService {
         @Header("Authorization") authHeader: String
     ): Response<ShippmentResponse>
 
-
+    @POST("requestQuotation")
+    suspend fun requestQuotation(
+        @Header("Authorization") authHeader: String,
+        @Body requestBody: RequestQuotation
+    ): Response<RequestResponse>
     @POST("shippment-details")
     suspend fun getShipmentsDetails(  @Header("Authorization") authHeader: String, @Body id: Int):Response<ShippmentDetailsResponse>
 }

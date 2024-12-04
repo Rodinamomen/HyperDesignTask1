@@ -4,6 +4,8 @@ import com.example.hyperdesigntask.auth.login.model.LogInResponse
 import com.example.hyperdesigntask.auth.register.model.RegisterResponse
 import com.example.hyperdesigntask.details.model.ShippmentDetailsResponse
 import com.example.hyperdesigntask.home.model.ShippmentResponse
+import com.example.hyperdesigntask.request.model.RequestQuotation
+import com.example.hyperdesigntask.request.model.RequestResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -11,6 +13,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 
 object ApiClient:RemoteDataSource {
+
 
     private val apiService = ApiHelper.retrofit.create(ApiService::class.java)
     override suspend fun registerUser(name: String,
@@ -31,6 +34,15 @@ object ApiClient:RemoteDataSource {
         val passwordPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
         val response = apiService.registerUser(namePart, emailPart, phonePart, passwordPart,countryIdPart, typePart, file, tokenPart)
         return  response
+    }
+
+    override suspend fun requestQuotation(
+        token: String,
+        requestBody: RequestQuotation
+    ): Response<RequestResponse> {
+
+        val bearerToken = "Bearer $token"
+        return  apiService.requestQuotation(bearerToken,requestBody)
     }
 
     override suspend fun loginUser(

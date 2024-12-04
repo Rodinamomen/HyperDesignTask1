@@ -63,7 +63,10 @@ class HomeFragment : Fragment() {
                 })
             }
         }
-
+        binding.btnRequest.setOnClickListener{
+            val action = HomeFragmentDirections.actionHomeFragmentToRequestFragment()
+            findNavController().navigate(action)
+        }
     }
     private fun getViewModelReady() {
         val factory = HomeViewModelFactory(HomeRepoImp(ApiClient))

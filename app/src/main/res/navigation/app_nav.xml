@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment3"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -48,4 +51,9 @@
             android:name="id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="com.example.hyperdesigntask.request.view.RequestFragment"
+        android:label="fragment_request"
+        tools:layout="@layout/fragment_request" />
 </navigation>
